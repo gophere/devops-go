@@ -8,9 +8,8 @@ stages:
             if [ -L /go/src/github.com/cubepaas/devops-go ]
             then
               rm /go/src/github.com/cubepaas/devops-go
-            else
-              ln -s `pwd` /go/src/github.com/cubepaas/devops-go
             fi
+            ln -s `pwd` /go/src/github.com/cubepaas/devops-go
             cd /go/src/github.com/cubepaas/devops-go
             go build -o bin/hello-server
             go test -cover
