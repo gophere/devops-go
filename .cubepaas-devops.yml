@@ -5,7 +5,12 @@ stages:
           image: golang:1.11
           shellScript: |-
             mkdir -p /go/src/github.com/cubepaas
-            ln -s `pwd` /go/src/github.com/cubepaas/devops-go
+            if [ -L /go/src/github.com/cubepaas/devops-go ]
+            then
+              rm /go/src/github.com/cubepaas/devops-go
+            else
+              ln -s `pwd` /go/src/github.com/cubepaas/devops-go
+            fi
             cd /go/src/github.com/cubepaas/devops-go
             go build -o bin/hello-server
             go test -cover
