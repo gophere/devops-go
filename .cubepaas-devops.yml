@@ -1,28 +1,32 @@
 stages:
-  - name: Build
-    steps:
-      - runScriptConfig:
-          image: link-cloud/golang
-          shellScript: |-
-            mkdir -p /go/src/github.com/cubepaas
-            if [ -L /go/src/github.com/cubepaas/devops-go ]
-            then
-              rm /go/src/github.com/cubepaas/devops-go
-            fi
-            ln -s `pwd` /go/src/github.com/cubepaas/devops-go
-            cd /go/src/github.com/cubepaas/devops-go
-            go mod init
-            go build -o bin/hello-server
-            go test -cover
-        env:
-          GOPROXY: https://goproxy.cn
-  - name: Publish
-    steps:
-      - publishImageConfig:
-          dockerfilePath: ./Dockerfile
-          buildContext: .
-          tag: example-helloserver:${CICD_EXECUTION_SEQUENCE}
-  - name: Deploy
-    steps:
-      - applyYamlConfig:
-          path: ./deployment.yaml
+- name: Clone
+  steps:
+  - sourceCodeConfig: {}
+- name: Build
+  steps:
+  - runScriptConfig:
+      image: link-cloud/golang
+      shellScript: |-
+        mkdir -p /go/src/github.com/cubepaas
+        if [ -L /go/src/github.com/cubepaas/devops-go ]
+        then
+          rm /go/src/github.com/cubepaas/devops-go
+        fi
+        ln -s `pwd` /go/src/github.com/cubepaas/devops-go
+        cd /go/src/github.com/cubepaas/devops-go
+        go mod init
+        go build -o bin/hello-server
+        go test -cover
+    env:
+      GOPROXY: https://goproxy.cn
+- name: Publish
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: example-helloserver:${CICD_EXECUTION_SEQUENCE}
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
+notification: {}
