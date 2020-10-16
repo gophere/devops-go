@@ -28,7 +28,7 @@ spec:
         app: helloworld
     spec:
       imagePullSecrets:
-      - name: devops-docker-registry
+      - name: local-registry
       containers:
       - name: helloworld
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
